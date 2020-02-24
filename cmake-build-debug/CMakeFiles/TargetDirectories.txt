@@ -1,0 +1,3 @@
+/home/tony/CLionProjects/Chapter2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/tony/CLionProjects/Chapter2/cmake-build-debug/CMakeFiles/Chapter2.dir
+/home/tony/CLionProjects/Chapter2/cmake-build-debug/CMakeFiles/edit_cache.dir
