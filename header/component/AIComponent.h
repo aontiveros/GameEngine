@@ -5,25 +5,33 @@
 #ifndef CHAPTER2_AICOMPONENT_H
 #define CHAPTER2_AICOMPONENT_H
 
-enum State {
-    Patrol,
-    Death,
-    Attack
-};
+#include <string>
+#include <unordered_map>
+#include "Component.h"
 
-class AIComponent {
+//forward declarations
+class Actor;
+class AIState;
+
+class AIComponent : public Component {
 
 public:
-    AIComponent();
-    void update(float deltaTime);
+    AIComponent(Actor* actor);
+    void update(float deltaTime) override;
+    void changeState(const std::string& name);
+
+
+    //Add a new state to the map
+    void registerState(AIState* state);
+
 
 private:
+    //Maps name of state to AIState instance
+    std::unordered_map<std::string, AIState*> mStateMap;
 
-    State mState;
+    //Current state that we are in
+    AIState* mState;
 
-    void updateAttack(float deltaTime);
-    void updatePatrol(float deltaTime);
-    void updateDeath(float deltaTime);
 };
 
 

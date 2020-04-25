@@ -4,36 +4,34 @@
 
 #include <SDL_log.h>
 #include "../../header/component/AIComponent.h"
+#include "../../header/state/AIState.h"
 
-AIComponent::AIComponent() {
-    mState = State::Patrol;
+AIComponent::AIComponent(Actor* actor) : Component(actor) {
 }
 
+void AIComponent::registerState(AIState* state) {
+    mStateMap.emplace(state->getName(), state);
+}
 
 void AIComponent::update(float deltaTime) {
-    switch (mState) {
-        case Patrol:
-            updatePatrol(deltaTime);
-            break;
-        case Attack:
-            updateAttack(deltaTime);
-            break;
-        case Death:
-            updateDeath(deltaTime);
-            break;
-        default:
-            SDL_Log("Unknown state: %d", mState);
+    if(mState) {
+        mState->update(deltaTime);
     }
 }
 
-void AIComponent::updatePatrol(float deltaTime) {
-    //Do a patrol
-}
-
-void AIComponent::updateAttack(float deltaTime) {
-    //Do a patrol
-}
-
-void AIComponent::updateDeath(float deltaTime) {
-    
+void AIComponent::changeState(const std::string &name) {
+    //Exit the old state
+    if(mState) {
+        mState->onExit();
+    }
+    auto itr = mStateMap.find(name);
+    if(itr != mStateMap.end()) {
+        mState = itr->second;
+        //Enter the new state
+        mState->onEnter();
+    } else {
+        SDL_Log("Could not find the state: %s in the state map!", name.c_str());
+        //ensure that the state is null
+        mState = nullptr;
+    }
 }
