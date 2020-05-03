@@ -7,6 +7,7 @@
 
 #include <SDL_system.h>
 #include "Component.h"
+#include "../graphics/Shader.h"
 
 //forward declaration
 class Actor;
@@ -16,7 +17,7 @@ public:
     SpriteComponent(Actor* actor, int drawOrder = 100);
     ~SpriteComponent();
 
-    virtual void draw(SDL_Renderer* renderer);
+    virtual void draw(Shader* shader);
     virtual void setTexture(SDL_Texture* texture);
 
     int getDrawOrder() { return mDrawOrder; }

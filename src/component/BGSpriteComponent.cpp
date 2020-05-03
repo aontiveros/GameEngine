@@ -21,23 +21,24 @@ void BGSpriteComponent::update(float deltaTime) {
     }
 }
 
-void BGSpriteComponent::draw(SDL_Renderer* renderer) {
-    for(auto& bg : mBGTextures) {
-        SDL_Rect rect;
-
-        rect.w = static_cast<int>(mScreenSize.x);
-        rect.h = static_cast<int>(mScreenSize.y);
-
-        rect.x = static_cast<int>(getActor()->getPosition().x - rect.w / 2 + bg.mOffset.x);
-        rect.y = static_cast<int>(getActor()->getPosition().y - rect.h / 2 + bg.mOffset.y);
-
-        SDL_RenderCopy(
-                renderer,
-                bg.mTexture,
-                nullptr,
-                &rect
-                );
-    }
+void BGSpriteComponent::draw(Shader* shader) {
+//    for(auto& bg : mBGTextures) {
+//        SDL_Rect rect;
+//
+//        rect.w = static_cast<int>(mScreenSize.x);
+//        rect.h = static_cast<int>(mScreenSize.y);
+//
+//        rect.x = static_cast<int>(getActor()->getPosition().x - rect.w / 2 + bg.mOffset.x);
+//        rect.y = static_cast<int>(getActor()->getPosition().y - rect.h / 2 + bg.mOffset.y);
+//
+//        SDL_RenderCopy(
+//                renderer,
+//                bg.mTexture,
+//                nullptr,
+//                &rect
+//                );
+//    }
+    SpriteComponent::draw(shader);
 }
 
 void BGSpriteComponent::setBGTextures(const std::vector<SDL_Texture *> &textures) {

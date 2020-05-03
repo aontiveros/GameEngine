@@ -15,7 +15,7 @@ public:
     TileMapComponent(int windowWidth, int windowHeight, Actor* actor, int drawOrder = 10);
 
     void update(float deltaTime) override;
-    void draw(SDL_Renderer* renderer) override;
+    void draw(Shader* shader) override;
 
 
     void setTileMapResource(std::string fileName);

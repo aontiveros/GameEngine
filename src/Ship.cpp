@@ -18,7 +18,7 @@ Ship::Ship(Game* game)
 	// Create an animated sprite component
 	AnimSpriteComponent* asc = new AnimSpriteComponent(this);
 	std::vector<SDL_Texture*> anims = {
-		game->loadTexture("Assets/Character01.png"),
+ 		game->loadTexture("Assets/Character01.png"),
 		game->loadTexture("Assets/Character02.png"),
         game->loadTexture("Assets/Character03.png"),
         game->loadTexture("Assets/Character04.png"),

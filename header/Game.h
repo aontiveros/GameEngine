@@ -9,6 +9,8 @@
 #include <SDL_video.h>
 #include <vector>
 #include <unordered_map>
+#include "graphics/VertexArray.h"
+#include "graphics/Shader.h"
 
 //forward declaration
 class Actor;
@@ -39,9 +41,12 @@ private:
     void generateOutput();
     void loadData();
     void unloadData();
+    void initSpriteVerts();
+    bool loadShaders();
 
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
+    SDL_GLContext mContext;
     bool mIsRunning;
     Uint32 mTicks;
 
@@ -52,6 +57,11 @@ private:
     //Components
     std::vector<SpriteComponent*> mSprites;
     std::vector<Asteroid*> mAsteroids;
+    Ship* mShip;
+
+    //Sprite vert
+    VertexArray* mSpriteVerts = nullptr;
+    Shader* mSpriteShader;
 
     bool mUpdatingActors;
 

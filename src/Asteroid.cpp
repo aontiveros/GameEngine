@@ -11,8 +11,9 @@
 #include "../header/component/CircleComponent.h"
 
 Asteroid::Asteroid(Game *game) : Actor(game) {
-    Vector2 randPosition = Random::getVector(Vector2::Zero, Vector2(1024.0f, 768.0f));
-    setPosition(randPosition);
+    Vector2 randPos = Random::getVector(Vector2(-512.0f, -384.0f),
+                                        Vector2(512.0f, 384.0f));
+    setPosition(randPos);
     setRotation(Random::getFloatRange(0.0f, Math::TwoPi));
 
     auto* sc = new SpriteComponent(this);
@@ -23,8 +24,6 @@ Asteroid::Asteroid(Game *game) : Actor(game) {
 
     cc = new CircleComponent(this);
     cc->setRadius(4);
-
-    game->addSprite(sc);
 
     addComponent(sc);
     addComponent(mc);

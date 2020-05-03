@@ -17,7 +17,7 @@ public:
     BGSpriteComponent(Actor* actor, int drawOrder = 10);
     //update/draw overrides
     void update(float deltaTime) override;
-    void draw(SDL_Renderer* renderer) override;
+    void draw(Shader* renderer) override;
 
     //Set the textures used for the background
     void setBGTextures(const std::vector<SDL_Texture*>& textures);

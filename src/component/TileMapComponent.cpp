@@ -47,45 +47,46 @@ void TileMapComponent::loadCSVFromResource() {
     }
 }
 
-void TileMapComponent::draw(SDL_Renderer *renderer) {
-    if(getTexture() != nullptr) {
-        int col = 8;
-        int tilesPerRow = 32;
-        int tileRows = 24;
-        int tileWidth = mWindowWidth / 32;
-        int tileHeight = mWindowHeight / 24;
-        for(int i = 0; i < tileRows; i++) {
-            for(int j = 0; j < tilesPerRow; j++) {
-                int tile = mTileMap[(i * tilesPerRow) + j];
-                if(tile != -1) {
-                    int tileX = tile % col * 32;
-                    int tileY = tile / col * 32;
-                    SDL_Rect tileRect;
-                    tileRect.w = 32;
-                    tileRect.h = 32;
-                    tileRect.x = tileX;
-                    tileRect.y = tileY;
-
-                    SDL_Rect screenRect;
-                    screenRect.h = tileHeight;
-                    screenRect.w = tileWidth;
-
-                    screenRect.x = j * tileWidth;
-                    screenRect.y = i * tileHeight;
-
-                    SDL_RenderCopyEx(
-                            renderer,
-                            getTexture(),
-                            &tileRect,
-                            &screenRect,
-                            0,
-                            nullptr,
-                            SDL_FLIP_NONE
-                    );
-                }
-            }
-        }
-    } else {
-        SDL_Log("Cannot draw tile map as there is no texture");
-    }
+void TileMapComponent::draw(Shader *shader) {
+    SpriteComponent::draw(shader);
+//    if(getTexture() != nullptr) {
+//        int col = 8;
+//        int tilesPerRow = 32;
+//        int tileRows = 24;
+//        int tileWidth = mWindowWidth / 32;
+//        int tileHeight = mWindowHeight / 24;
+//        for(int i = 0; i < tileRows; i++) {
+//            for(int j = 0; j < tilesPerRow; j++) {
+//                int tile = mTileMap[(i * tilesPerRow) + j];
+//                if(tile != -1) {
+//                    int tileX = tile % col * 32;
+//                    int tileY = tile / col * 32;
+//                    SDL_Rect tileRect;
+//                    tileRect.w = 32;
+//                    tileRect.h = 32;
+//                    tileRect.x = tileX;
+//                    tileRect.y = tileY;
+//
+//                    SDL_Rect screenRect;
+//                    screenRect.h = tileHeight;
+//                    screenRect.w = tileWidth;
+//
+//                    screenRect.x = j * tileWidth;
+//                    screenRect.y = i * tileHeight;
+//
+//                    SDL_RenderCopyEx(
+//                            renderer,
+//                            getTexture(),
+//                            &tileRect,
+//                            &screenRect,
+//                            0,
+//                            nullptr,
+//                            SDL_FLIP_NONE
+//                    );
+//                }
+//            }
+//        }
+//    } else {
+//        SDL_Log("Cannot draw tile map as there is no texture");
+//    }
 }
