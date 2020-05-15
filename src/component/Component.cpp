@@ -3,7 +3,7 @@
 //
 
 #include "../../header/component/Component.h"
-#include "../../header/Actor.h"
+#include "../../header/actor/Actor.h"
 
 Component::Component(Actor *actor, int updateOrder) {
     mActor = actor;

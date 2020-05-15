@@ -5,7 +5,7 @@
 #ifndef CHAPTER2_ASTEROID_H
 #define CHAPTER2_ASTEROID_H
 
-#include "../header/Actor.h"
+#include "Actor.h"
 
 class CircleComponent;
 class MoveComponent;

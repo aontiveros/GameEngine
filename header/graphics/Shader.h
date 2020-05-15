@@ -9,6 +9,9 @@
 #include <string>
 #include <GL/glew.h>
 
+//forward declare
+class Matrix4;
+
 class Shader {
 public:
     Shader();
@@ -19,6 +22,8 @@ public:
     void unload();
     // This is the active shader program
     void setActive();
+    //set uniform in opengl
+    void setMatrixUniform(const char* name, const Matrix4& matrix);
 
 private:
     // Tries to compile the specified shader

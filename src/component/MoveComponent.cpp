@@ -3,7 +3,7 @@
 //
 
 #include "../../header/component/MoveComponent.h"
-#include "../../header/Actor.h"
+#include "../../header/actor/Actor.h"
 #include "../../header/Math.h"
 
 MoveComponent::MoveComponent(Actor *actor, int updateOwner) : Component(actor, updateOwner) {
@@ -12,12 +12,17 @@ MoveComponent::MoveComponent(Actor *actor, int updateOwner) : Component(actor, u
 
 void MoveComponent::update(float deltaTime) {
     if(!Math::NearZero(mAngularSpeed)) {
-        float rot = getActor()->getRotation();
-        rot += mAngularSpeed * deltaTime;
+        Quaternion rot = getActor()->getRotation();
+        float angle = mAngularSpeed * deltaTime;
+        // Create a quaternion for incremental rotation
+        // (Rotate about the axis)
+        Quaternion inc(Vector3::UnitX, angle);
+        // Concat old quaternion to old quaternion
+        rot = Quaternion::Concatenate(rot, inc);
         getActor()->setRotation(rot);
     }
     if(!Math::NearZero(mForwardSpeed)) {
-        Vector2 pos = getActor()->getPosition();
+        Vector3 pos = getActor()->getPosition();
         pos += getActor()->getForward() * mForwardSpeed * deltaTime;
         getActor()->setPosition(pos);
     }

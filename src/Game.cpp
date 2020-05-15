@@ -4,14 +4,16 @@
 
 #include <algorithm>
 #include <GL/glew.h>
+#include <SDL_image.h>
 #include "../header/Game.h"
-#include "../header/Actor.h"
+#include "../header/actor/Actor.h"
 #include "../header/component/SpriteComponent.h"
 #include "../header/component/BGSpriteComponent.h"
-#include "../header/Ship.h"
+#include "../header/actor/Ship.h"
 #include "../header/component/TileMapComponent.h"
-#include "../header/Asteroid.h"
+#include "../header/actor/Asteroid.h"
 #include "../header/component/CircleComponent.h"
+#include "../header/graphics/Texture.h"
 
 Game::Game() {
     mIsRunning = true;
@@ -139,6 +141,8 @@ void Game::updateGame() {
 
     //Move any pending actors to actors
     for(auto pendingActor : mPendingActors) {
+        //Perform a world transform in the same frame that they are created.
+        pendingActor->computeWorldTransform();
         mActors.emplace_back(pendingActor);
     }
     mPendingActors.clear();
@@ -152,35 +156,30 @@ void Game::updateGame() {
         }
     }
 
-
-    //update asteroid collision
-    for(int i = 0; i < mAsteroids.size(); i++) {
-        for(int j = i + 1; j < mAsteroids.size(); j++) {
-            if(intersect(mAsteroids[i]->getCircle(), mAsteroids[j])) {
-                //mAsteroids[0]->reflect();
-                //mAsteroids[1]->reflect();
-            }
-        }
-    }
-
-    for(auto asteroid : mAsteroids) {
-        Vector2 pos = asteroid->getPosition();
-        if (pos.x < 0 || pos.x > WINDOW_WIDTH) {
-            asteroid->reflect(1, 0);
-        } else if (pos.y < 0 || pos.y > WINDOW_HEIGHT) {
-
-        }
-    }
-
     //Delete all the dead actors
     for(auto deadActor : deadActors) {
         delete deadActor;
     }
+
+    //update background colpr
+    if(mBlue >= 1.0f) {
+        direction = false;
+        mBlue = 1.0f;
+    } else if(mBlue <= 0.0f) {
+        direction = true;
+        mBlue = 0.0f;
+    }
+    if(direction) {
+        mBlue += .01f;
+    } else {
+        mBlue -= .01f;
+    }
+
 }
 
 void Game::generateOutput() {
     // Set the color to grey
-    glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+    glClearColor(mRed, mGreen, mBlue, 1.0f);
     //clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -215,41 +214,31 @@ void Game::removeActor(Actor *actor) {
     mPendingActors.erase(std::remove(mPendingActors.begin(), mPendingActors.end(), actor), mPendingActors.end());
 }
 
-SDL_Texture* Game::loadTexture(char *file) {
-//    SDL_Texture* tex = nullptr;
-//    // Is the texture already in the map?
-//    std::string fileName(file);
-//    auto iter = mTextures.find(fileName);
-//    if (iter != mTextures.end()) {
-//        tex = iter->second;
-//    }
-//    else {
-//        // Load from file
-//        SDL_Surface* surf = IMG_Load(fileName.c_str());
-//        if (!surf)
-//        {
-//            SDL_Log("Failed to load texture file %s", fileName.c_str());
-//            return nullptr;
-//        }
-//
-//        // Create texture from surface
-//        tex = SDL_CreateTextureFromSurface(mRenderer, surf);
-//        SDL_FreeSurface(surf);
-//        if (!tex)
-//        {
-//            SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
-//            return nullptr;
-//        }
-//
-//        mTextures.emplace(fileName.c_str(), tex);
-//    }
-    return nullptr;
+Texture* Game::loadTexture(const std::string& fileName) {
+    Texture* tex = nullptr;
+    // Is the texture already in the map?
+    auto iter = mTextures.find(fileName);
+    if (iter != mTextures.end()) {
+        tex = iter->second;
+    } else {
+        // Load from file
+        tex = new Texture();
+        if (!tex->load(fileName)) {
+            SDL_Log("Failed to load texture file %s", fileName.c_str());
+            delete tex;
+            return nullptr;
+        }
+        mTextures.emplace(fileName.c_str(), tex);
+    }
+    return tex;
 }
 
 void Game::loadData() {
     // Create player's ship
     mShip = new Ship(this);
-    mShip->setRotation(Math::PiOver2);
+    Quaternion q(Vector3::UnitY, -Math::PiOver2);
+    q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
+    mShip->setRotation(q);
 
     // Create asteroids
     const int numAsteroids = 20;
@@ -279,25 +268,23 @@ void Game::removeSprite(SpriteComponent* component) {
 void Game::unloadData() {
     // Delete actors
     // Because ~Actor calls RemoveActor, have to use a different style loop
-    while (!mActors.empty())
-    {
+    while (!mActors.empty()) {
         delete mActors.back();
     }
 
     // Destroy textures
-    for (auto i : mTextures)
-    {
-        SDL_DestroyTexture(i.second);
+    for (auto i : mTextures) {
+        delete i.second;
     }
     mTextures.clear();
 }
 
 void Game::initSpriteVerts() {
     float vertexBuffer[] = {
-            -0.5f,  0.5f, 0.f, 0.f, 0.f, // top left
-            0.5f,  0.5f, 0.f, 1.f, 0.f, // top right
-            0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
-            -0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
+            -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.0f, 0.0f, 0.0f,// top left
+            0.5f,  0.5f, 0.f, 1.f, 0.f,  0.0f, 0.0f, 0.0f, // top right
+            0.5f, -0.5f, 0.f, 1.f, 1.f,  0.0f, 0.0f, 0.0f, // bottom right
+            -0.5f, -0.5f, 0.f, 0.f, 1.f,  0.0f, 0.0f, 0.0f // bottom left
     };
 
     unsigned int indexBuffer[] = {
@@ -309,9 +296,11 @@ void Game::initSpriteVerts() {
 
 bool Game::loadShaders() {
     mSpriteShader = new Shader();
-    if(!mSpriteShader->load("Shaders/Basic.vert", "Shaders/Basic.frag")) {
+    if(!mSpriteShader->load("Shaders/Sprite.vert", "Shaders/Sprite.frag")) {
         return false;
     }
     mSpriteShader->setActive();
+    Matrix4 viewProjection = Matrix4::CreateSimpleViewProj(1024.0f, 768.0f);
+    mSpriteShader->setMatrixUniform("uViewProj", viewProjection);
     return true;
 }

@@ -6,7 +6,7 @@
 #define CHAPTER2_ACTOR_H
 
 #include <vector>
-#include "Math.h"
+#include "../Math.h"
 
 //forward declarations
 class Game;
@@ -32,31 +32,38 @@ public:
 
     //Getters and Setters
     State getState() { return mState; }
-    Vector2 getPosition() { return mPosition; }
+    Vector3 getPosition() { return mPosition; }
     Game* getGame() { return mGame; }
 
-    Vector2 getForward() const { return Vector2(Math::Cos(mRotation), -Math::Sin(mRotation)); }
+    Vector3 getForward() const { return Vector3::Transform(Vector3::UnitX, mRotation); }
 
-    void setScale(float scale) { mScale = scale; }
-    void setRotation(float rotation) { mRotation = rotation;}
+    void setScale(float scale);
+    void setRotation(Quaternion rotation);
     float getScale() { return mScale; }
-    float getRotation() { return mRotation; }
-    void setPosition(Vector2 position);
+    const Quaternion& getRotation() const { return mRotation; }
+    void setPosition(Vector3 position);
 
     //Add/Remove Components
     void addComponent(Component* component);
     void removeComponent(Component* component);
 
+    //World Transform
+    void computeWorldTransform();
+    const Matrix4& getWorldTransform() const { return mWorldTransform; }
+
 private:
     //Actors current state
     State mState;
     //Transform
-    Vector2 mPosition; //The current position of the actor
+    Vector3 mPosition; //The current position of the actor
+    Quaternion mRotation;
     float mScale; // Uniforms the scale of the actor (1.0f for 100%)
-    float mRotation; // Rotation angle (radians)
     //list of components
     std::vector<Component*> mComponents;
     Game* mGame;
+    //World transform
+    Matrix4 mWorldTransform;
+    bool mRecomputeWorldTransform;
 };
 
 

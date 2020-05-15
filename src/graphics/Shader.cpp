@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include "../../header/graphics/Shader.h"
+#include "../../header/Math.h"
 
 Shader::Shader() {}
 
@@ -92,4 +93,16 @@ void Shader::unload() {
     glDeleteProgram(mShaderProgram);
     glDeleteShader(mVertexShader);
     glDeleteShader(mFragShader);
+}
+
+void Shader::setMatrixUniform(const char *name, const Matrix4 &matrix) {
+    // Find the uniform by this name (consider caching)
+    GLuint loc = glGetUniformLocation(mShaderProgram, name);
+    //Send the matrix data to the uniform
+    glUniformMatrix4fv(
+            loc,     // Uniform ID
+            1,       // Number of Matrices
+            GL_TRUE,  // Set to TRUE if using row vectors
+            matrix.GetAsFloatPtr()  // Pointer to matrix data
+            );
 }

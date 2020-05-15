@@ -18,6 +18,7 @@ class SpriteComponent;
 class Ship;
 class MoveComponent;
 class Asteroid;
+class Texture;
 
 class Game {
 public:
@@ -32,7 +33,7 @@ public:
     void addSprite(SpriteComponent* component);
     void removeSprite(SpriteComponent* component);
 
-    SDL_Texture *loadTexture(char *file);
+    Texture *loadTexture(const std::string& fileName);
 
 
 private:
@@ -45,7 +46,6 @@ private:
     bool loadShaders();
 
     SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
     SDL_GLContext mContext;
     bool mIsRunning;
     Uint32 mTicks;
@@ -66,11 +66,15 @@ private:
     bool mUpdatingActors;
 
     // Map of textures loaded
-    std::unordered_map<std::string, SDL_Texture*> mTextures;
+    std::unordered_map<std::string, Texture*> mTextures;
 
     const int WINDOW_HEIGHT = 768;
     const int WINDOW_WIDTH = 1024;
 
+    float mRed = 0.0f;
+    float mGreen = 0.0f;
+    float mBlue = 0.0f;
+    bool direction = true;
 };
 
 

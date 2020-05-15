@@ -11,6 +11,7 @@
 
 //forward declaration
 class Actor;
+class Texture;
 
 class SpriteComponent : public Component{
 public:
@@ -18,15 +19,15 @@ public:
     ~SpriteComponent();
 
     virtual void draw(Shader* shader);
-    virtual void setTexture(SDL_Texture* texture);
+    virtual void setTexture(Texture* texture);
 
     int getDrawOrder() { return mDrawOrder; }
-    SDL_Texture* getTexture(){ return mTexture; }
+    Texture* getTexture(){ return mTexture; }
 
 
 private:
     //Texture to draw
-    SDL_Texture* mTexture;
+    Texture* mTexture;
 
     //Draw order used for painter's algorithm
     int mDrawOrder;

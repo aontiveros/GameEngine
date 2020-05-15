@@ -17,6 +17,8 @@ public:
     virtual ~Component();
     //update this component using dela time
     virtual void update(float deltaTime);
+    //Callback when world transform is updated
+    virtual void onUpdateWorldTransform() {}
 
     //getter
     Actor* getActor() { return mActor; }

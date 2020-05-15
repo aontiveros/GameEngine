@@ -3,6 +3,7 @@
 //
 
 #include "../../header/component/AnimSpriteComponent.h"
+#include "../../header/graphics/Texture.h"
 
 AnimSpriteComponent::AnimSpriteComponent(Actor *actor, int drawOrder) : SpriteComponent(actor, drawOrder) {
     mCurrentFrame = 0.0f;
@@ -25,7 +26,7 @@ void AnimSpriteComponent::update(float deltaTime) {
     }
 }
 
-void AnimSpriteComponent::setAnimationTextures(const std::vector<SDL_Texture*>& textures) {
+void AnimSpriteComponent::setAnimationTextures(const std::vector<Texture*>& textures) {
     mAnimationTextures = textures;
     if(!mAnimationTextures.empty()) {
         mCurrentFrame = 0.0f;

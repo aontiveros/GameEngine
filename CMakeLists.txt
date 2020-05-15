@@ -23,24 +23,35 @@ if (SDL2_FOUND)
     link_libraries(${SDL2_image_LIBRARIES})
 endif()
 
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+INCLUDE_DIRECTORIES( ${SDL2IMAGE_INCLUDE_DIRS})
+link_libraries(${SDL2IMAGE_LIBRARIES})
+
+find_package(RapidJSON REQUIRED)
+if(RapidJSON_FOUND)
+    include_directories(${RapidJSON_INCLUDE_DIRS})
+    link_libraries(${RapidJSON_LIBRARIES})
+endif()
 
 #find_package(SDL2_image REQUIRED)
 #if (SDL2_image_FOUND)
-#    include_directories(${SDL2_imageL_INCLUDE_DIRS})
+#    include_directories(${SDL2_image_INCLUDE_DIRS})
+#    link_libraries(${SDL2_imageL_LIBRARIES})
 #endif()
-#${SDL2_LIBRARIES} ${SDL2_image_LIBRARIES}
-
 
 file(COPY Assets DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY Shaders DESTINATION ${CMAKE_BINARY_DIR})
-include_directories("${PROJECT_SOURCE_DIR}/Shaders/")
-
-
+file(GLOB files "Shaders/*")
+foreach(file ${files})
+    get_filename_component(file ${file} NAME)
+    message(${file})
+    configure_file(Shaders/${file} ${CMAKE_BINARY_DIR}/Shaders/${file})
+endforeach()
+link_libraries(/usr/lib/libSOIL.so)
 add_executable(Chapter2 main.cpp
         src/Game.cpp
         header/Game.h
-        src/Actor.cpp
-        header/Actor.h
+        src/actor/Actor.cpp
+        header/actor/Actor.h
         src/component/Component.cpp
         header/component/Component.h
         src/component/SpriteComponent.cpp
@@ -50,13 +61,13 @@ add_executable(Chapter2 main.cpp
         header/component/AnimSpriteComponent.h
         src/component/BGSpriteComponent.cpp
         header/component/BGSpriteComponent.h
-        src/Ship.cpp header/Ship.h
+        src/actor/Ship.cpp header/actor/Ship.h
         src/component/TileMapComponent.cpp
         header/component/TileMapComponent.h
         src/component/MoveComponent.cpp
         header/component/MoveComponent.h
-        src/Asteroid.cpp
-        header/Asteroid.h
+        src/actor/Asteroid.cpp
+        header/actor/Asteroid.h
         src/Random.cpp
         header/Random.h
         src/component/CircleComponent.cpp
@@ -66,4 +77,4 @@ add_executable(Chapter2 main.cpp
         src/state/AIState.cpp
         header/state/AIState.h
         src/state/AIPatrol.cpp
-        header/state/AIPatrol.h src/graphics/VertexArray.cpp header/graphics/VertexArray.h src/graphics/Shader.cpp header/graphics/Shader.h)
+        header/state/AIPatrol.h src/graphics/VertexArray.cpp header/graphics/VertexArray.h src/graphics/Shader.cpp header/graphics/Shader.h src/graphics/Texture.cpp header/graphics/Texture.h src/graphics/Mesh.cpp header/graphics/Mesh.h src/graphics/Renderer.cpp header/graphics/Renderer.h)

@@ -3,7 +3,7 @@
 //
 
 #include "../../header/component/BGSpriteComponent.h"
-#include "../../header/Actor.h"
+#include "../../header/actor/Actor.h"
 
 BGSpriteComponent::BGSpriteComponent(Actor *actor, int drawOrder) : SpriteComponent(actor, drawOrder) {
     mScrollSpeed = 0.0f;

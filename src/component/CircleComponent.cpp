@@ -3,7 +3,7 @@
 //
 
 #include "../../header/component/CircleComponent.h"
-#include "../../header/Actor.h"
+#include "../../header/actor/Actor.h"
 
 CircleComponent::CircleComponent(Actor *actor) : Component(actor) {
 }

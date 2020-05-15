@@ -11,6 +11,7 @@
 
 //forward declaration
 class Actor;
+class Texture;
 
 class AnimSpriteComponent : public SpriteComponent {
 public:
@@ -18,7 +19,7 @@ public:
 
     void update(float deltaTime) override;
     // Set the textures used for animation
-    void setAnimationTextures(const std::vector<SDL_Texture*>& textures);
+    void setAnimationTextures(const std::vector<Texture*>& textures);
 
     // get/set the animation fps
     float getAnimationFps() const { return mAnimationFps; }
@@ -26,7 +27,7 @@ public:
 
 private:
     //All textures
-    std::vector<SDL_Texture*> mAnimationTextures;
+    std::vector<Texture*> mAnimationTextures;
     //Current frame displayed
     float mCurrentFrame;
     // Animation frame rate
