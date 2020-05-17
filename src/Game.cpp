@@ -14,6 +14,8 @@
 #include "../header/actor/Asteroid.h"
 #include "../header/component/CircleComponent.h"
 #include "../header/graphics/Texture.h"
+#include "../header/graphics/Shader.h"
+
 
 Game::Game() {
     mIsRunning = true;

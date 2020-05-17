@@ -7,6 +7,7 @@
 #include "../../header/Game.h"
 #include "../../header/actor/Actor.h"
 #include "../../header/Math.h"
+#include "../../header/graphics/Shader.h"
 #include "../../header/graphics/Texture.h"
 
 

@@ -10,7 +10,6 @@
 #include <vector>
 #include <unordered_map>
 #include "graphics/VertexArray.h"
-#include "graphics/Shader.h"
 
 //forward declaration
 class Actor;
@@ -19,6 +18,7 @@ class Ship;
 class MoveComponent;
 class Asteroid;
 class Texture;
+class Shader;
 
 class Game {
 public:

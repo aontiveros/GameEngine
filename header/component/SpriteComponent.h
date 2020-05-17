@@ -7,11 +7,11 @@
 
 #include <SDL_system.h>
 #include "Component.h"
-#include "../graphics/Shader.h"
 
 //forward declaration
 class Actor;
 class Texture;
+class Shader;
 
 class SpriteComponent : public Component{
 public:
