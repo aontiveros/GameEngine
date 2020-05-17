@@ -23,5 +23,5 @@ void main() {
     vec4 position = vec4(inPosition, 1.0);
     gl_Position = position * uWorldTransform * uViewProj;
     // Pass along the texture coordinates to the fragment shader.
-    fragTextCoord = inTextCoord;
+    fragTextCoord = inTexCoord;
 }

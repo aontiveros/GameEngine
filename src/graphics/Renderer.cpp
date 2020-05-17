@@ -25,10 +25,6 @@ Renderer::~Renderer() {
 bool Renderer::initialize(float screenWidth, float screenHeight) {
     mScreenHeight = screenHeight;
     mScreenWidth = screenWidth;
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        return false;
-    }
     //Set the core openGL profile
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
                         SDL_GL_CONTEXT_PROFILE_CORE);
@@ -80,11 +76,38 @@ bool Renderer::initialize(float screenWidth, float screenHeight) {
 }
 
 void Renderer::draw() {
+    // Set the color to grey
+    glClearColor(mRed, mGreen, mBlue, 1.0f);
+    //clear the color buffer
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    // Draw all sprite components
+    // Enable alpha blending on the color buffer
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Set the shader / vertices as active
+    mSpriteShader->setActive();
+    mSpriteVerts->setActive();
+
+    // Draw all out sprites
+    for(auto sprite : mSprites) {
+        sprite->draw(mSpriteShader);
+    }
+
+    //Swap the buffers, which also displays the scene
+    SDL_GL_SwapWindow(mWindow);
 }
 
 bool Renderer::loadShaders() {
-
+    mSpriteShader = new Shader();
+    if(!mSpriteShader->load("Shaders/Sprite.vert", "Shaders/Sprite.frag")) {
+        return false;
+    }
+    mSpriteShader->setActive();
+    Matrix4 viewProjection = Matrix4::CreateSimpleViewProj(1024.0f, 768.0f);
+    mSpriteShader->setMatrixUniform("uViewProj", viewProjection);
+    return true;
 }
 
 void Renderer::shutdown() {
@@ -106,14 +129,32 @@ void Renderer::shutdown() {
 
     SDL_GL_DeleteContext(mContext);
     SDL_DestroyWindow(mWindow);
-    SDL_Quit();
 }
 void Renderer::unloadData() {
+    for(const auto& i : mTextures) {
+        i.second->unload();
+        delete i.second;
+    }
+    mTextures.clear();
 
+    for(const auto& i : mMeshes) {
+        i.second->unload();
+        delete i.second;
+    }
+    mMeshes.clear();
 }
 
 void Renderer::addSprite(SpriteComponent *sprite) {
-    mSprites.emplace_back(sprite);
+    //Find the insertion point for the new sprint
+    //this would be the first element that has a higher insertion point that the new one.
+    int drawOrder = sprite->getDrawOrder();
+    auto itr = mSprites.begin();
+    for(;itr != mSprites.end(); itr++) {
+        if(drawOrder < (*itr)->getDrawOrder()) {
+            break;
+        }
+    }
+    mSprites.insert(itr, sprite);
 }
 
 void Renderer::remoteSprite(SpriteComponent *sprite) {
@@ -146,14 +187,12 @@ Mesh * Renderer::getMesh(const std::string &fileName) {
         rMesh = itr->second;
     } else {
         rMesh = new Mesh();
-        if(rMesh->load(fileName, mGame)) {
-            mMeshes.emplace(fileName, rMesh);
-            return rMesh;
-        } else {
+        if(!rMesh->load(fileName, mGame)) {
             SDL_Log("Failed to load mesh file %s", fileName.c_str());
             delete rMesh;
             rMesh = nullptr;
         }
+        mMeshes.emplace(fileName, rMesh);
     }
     return rMesh;
 }

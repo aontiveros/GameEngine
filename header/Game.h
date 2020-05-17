@@ -19,6 +19,7 @@ class MoveComponent;
 class Asteroid;
 class Texture;
 class Shader;
+class Renderer;
 
 class Game {
 public:
@@ -42,39 +43,27 @@ private:
     void generateOutput();
     void loadData();
     void unloadData();
-    void initSpriteVerts();
     bool loadShaders();
 
-    SDL_Window* mWindow;
-    SDL_GLContext mContext;
     bool mIsRunning;
     Uint32 mTicks;
 
     //Actors
     std::vector<Actor*> mActors;
     std::vector<Actor*> mPendingActors;
-
-    //Components
-    std::vector<SpriteComponent*> mSprites;
-    std::vector<Asteroid*> mAsteroids;
     Ship* mShip;
-
-    //Sprite vert
-    VertexArray* mSpriteVerts = nullptr;
-    Shader* mSpriteShader;
 
     bool mUpdatingActors;
 
-    // Map of textures loaded
-    std::unordered_map<std::string, Texture*> mTextures;
-
-    const int WINDOW_HEIGHT = 768;
-    const int WINDOW_WIDTH = 1024;
+    const float WINDOW_HEIGHT = 768;
+    const float WINDOW_WIDTH = 1024;
 
     float mRed = 0.0f;
     float mGreen = 0.0f;
     float mBlue = 0.0f;
     bool direction = true;
+
+    Renderer* mRenderer;
 };
 
 
