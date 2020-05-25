@@ -80,7 +80,7 @@ bool Shader::isValidProgram() {
         memset(buffer, 0, 512);
         glGetProgramInfoLog(mShaderProgram, 511, nullptr, buffer);
         SDL_Log("GLSL Compilation failed:\n%s", buffer);
-        return false;
+        return false;   
     }
     return true;
 }
@@ -105,4 +105,25 @@ void Shader::setMatrixUniform(const char *name, const Matrix4 &matrix) {
             GL_TRUE,  // Set to TRUE if using row vectors
             matrix.GetAsFloatPtr()  // Pointer to matrix data
             );
+}
+
+void Shader::setVectorUniform(const char *name, Vector3 vector) {
+    // Get the vector uniform by name from program
+    GLuint loc = glGetUniformLocation(mShaderProgram, name);
+    // Send the vector to the uniform
+    glUniform3fv(
+            loc, // Uniform ID
+            1, // Number of vertices
+            vector.GetAsFloatPtr() // Point to vertex data
+            );
+}
+
+void Shader::setFloatUniform(const char *name, float fl) {
+    // Get the float uniform by name from program
+    GLuint loc = glGetUniformLocation(mShaderProgram, name);
+    // Send the float data to the uniform
+    glUniform1f(
+            loc, // Uniform ID
+            fl //float data
+    );
 }

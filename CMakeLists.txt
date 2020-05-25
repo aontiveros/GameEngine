@@ -77,4 +77,4 @@ add_executable(Chapter2 main.cpp
         src/state/AIState.cpp
         header/state/AIState.h
         src/state/AIPatrol.cpp
-        header/state/AIPatrol.h src/graphics/VertexArray.cpp header/graphics/VertexArray.h src/graphics/Shader.cpp header/graphics/Shader.h src/graphics/Texture.cpp header/graphics/Texture.h src/graphics/Mesh.cpp header/graphics/Mesh.h src/graphics/Renderer.cpp header/graphics/Renderer.h)
+        header/state/AIPatrol.h src/graphics/VertexArray.cpp header/graphics/VertexArray.h src/graphics/Shader.cpp header/graphics/Shader.h src/graphics/Texture.cpp header/graphics/Texture.h src/graphics/Mesh.cpp header/graphics/Mesh.h src/graphics/Renderer.cpp header/graphics/Renderer.h src/component/MeshComponent.cpp header/component/MeshComponent.h src/actor/PlaneActor.cpp header/actor/PlaneActor.h src/actor/CameraActor.cpp header/actor/CameraActor.h)

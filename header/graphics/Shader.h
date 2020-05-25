@@ -11,6 +11,7 @@
 
 //forward declare
 class Matrix4;
+class Vector3;
 
 class Shader {
 public:
@@ -24,6 +25,9 @@ public:
     void setActive();
     //set uniform in opengl
     void setMatrixUniform(const char* name, const Matrix4& matrix);
+    // set uniform vector
+    void setVectorUniform(const char* name, Vector3 vector);
+    void setFloatUniform(const char* name, float fl);
 
 private:
     // Tries to compile the specified shader

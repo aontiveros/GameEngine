@@ -8,11 +8,13 @@
 
 #include <string>
 #include <vector>
+#include <rapidjson/document.h>
 
 //forward declaration
 class Game;
 class VertexArray;
 class Texture;
+
 
 class Mesh {
 public:
@@ -29,6 +31,8 @@ public:
     const std::string& getShaderName() const { return mShaderName; }
     //Get the object space bounding the sphere radius
     float getRadius() const { return mRadius; }
+    // Get the specular power!!!
+    float getSpecularPower() const { return mSpecularPower; }
 private:
     // Vertex Array associated with this mesh
     VertexArray* mVertexArray;
@@ -38,8 +42,16 @@ private:
     std::string mShaderName;
     // Stores the object space bounding sphere radius
     float mRadius;
+    // Specular power
+    float mSpecularPower;
 
     const std::string TEXTURE_ATTRIBUTE = "textures";
+    const std::string VERTICIES_ATTRIBUTE = "vertices";
+    const std::string INDICIES_ATTRIBUTE = "indices";
+    const std::string SPECULAR_POWER = "specularPower";
+
+    bool parseTextureData(const rapidjson::Document &doc, const std::string& fileName, Game* game);
+    bool parseVertexData(const rapidjson::Document &doc, const std::string& fileName, Game* game);
 };
 
 

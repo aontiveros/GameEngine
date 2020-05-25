@@ -5,6 +5,7 @@
 #include "../../header/graphics/Renderer.h"
 #include "../../header/actor/Ship.h"
 #include "../../header/component/SpriteComponent.h"
+#include "../../header/component/MeshComponent.h"
 #include "../../header/graphics/VertexArray.h"
 #include "../../header/graphics/Texture.h"
 #include "../../header/graphics/Mesh.h"
@@ -49,6 +50,10 @@ bool Renderer::initialize(float screenWidth, float screenHeight) {
         return false;
     }
 
+    //init the z-buffer within opengl
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    glEnable(GL_DEPTH_TEST);
+
     //Grab the context for openGL
     mContext = SDL_GL_CreateContext(mWindow);
 
@@ -69,7 +74,6 @@ bool Renderer::initialize(float screenWidth, float screenHeight) {
     createSpriteVerts();
 
     loadData();
-
     mTicks = SDL_GetTicks();
 
     return true;
@@ -97,16 +101,51 @@ void Renderer::draw() {
 
     //Swap the buffers, which also displays the scene
     SDL_GL_SwapWindow(mWindow);
+
+    // Enable depth buffering/disable alpha blend
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    // Set the basic mesh shader active
+    mMeshShader->setActive();
+    // Update the view proj matrix
+    mMeshShader->setMatrixUniform("uViewProj", mView * mProjection);
+    for(auto mc : mMeshComponents) {
+        mc->draw(mMeshShader);
+    }
 }
 
 bool Renderer::loadShaders() {
     mSpriteShader = new Shader();
     if(!mSpriteShader->load("Shaders/Sprite.vert", "Shaders/Sprite.frag")) {
+        delete mSpriteShader;
+        mSpriteShader = nullptr;
         return false;
     }
     mSpriteShader->setActive();
     Matrix4 viewProjection = Matrix4::CreateSimpleViewProj(1024.0f, 768.0f);
     mSpriteShader->setMatrixUniform("uViewProj", viewProjection);
+
+    mMeshShader = new Shader();
+    if(!mMeshShader->load("Shaders/Phong.vert", "Shaders/Phong.frag")) {
+        delete mMeshShader;
+        mMeshShader = nullptr;
+        return false;
+    }
+    mMeshShader->setActive();
+    // Set the view projection matrix
+    mView = Matrix4::CreateLookAt(
+            Vector3::Zero, // Camera position
+            Vector3::UnitX, // Target Position
+            Vector3::UnitZ // Up
+            );
+    mProjection = Matrix4::CreatePerspectiveFOV(
+            Math::ToRadians(70.0f), // Horizontal POV
+            mScreenWidth, // Width of view
+            mScreenHeight, // Height of view
+            25.0f, // Near plane distance
+            10000.0f // Far plane distance
+            );
+    mMeshShader->setMatrixUniform("uViewProj", mView * mProjection);
     return true;
 }
 
@@ -124,8 +163,15 @@ void Renderer::shutdown() {
     }
 
     delete mSpriteVerts;
-    mSpriteShader->unload();
-    delete mSpriteShader;
+    if(mSpriteShader) {
+        mSpriteShader->unload();
+        delete mSpriteShader;
+    }
+
+    if(mMeshShader) {
+        mMeshShader->unload();
+        delete mMeshShader;
+    }
 
     SDL_GL_DeleteContext(mContext);
     SDL_DestroyWindow(mWindow);
@@ -225,4 +271,33 @@ void Renderer::loadData() {
 //    {
 //        new Asteroid(this);
 //    }
+}
+
+MeshComponent *Renderer::removeMeshComponent(size_t index) {
+    if(index >= mMeshComponents.size() || index < 0) {
+        return nullptr;
+    }
+    return mMeshComponents.at(index);
+}
+
+void Renderer::addMeshComponent(MeshComponent *mc) {
+    mMeshComponents.emplace_back(mc);
+}
+
+void Renderer::setLightUniforms(Shader *shader) {
+    // Camera position is from inverted view
+    Matrix4 invView = mView;
+    invView.Invert();
+    shader->setVectorUniform("uCameraPos", invView.GetTranslation());
+    // Ambient light
+    shader->setVectorUniform("uAmbientLight", mAmbientLight);
+    // Set the directional light
+    shader->setVectorUniform("uDirLight.mDirection", mDirectionalLight.mDirection);
+    shader->setVectorUniform("uDirLight.mDiffuseColor", mDirectionalLight.mDiffuseColor);
+    shader->setVectorUniform("uDirLight.mSpecColor", mDirectionalLight.mSpecColor);
+}
+
+MeshComponent *Renderer::removeMeshComponent(MeshComponent* mc) {
+    auto iter = std::find(mMeshComponents.begin(), mMeshComponents.end(), mc);
+    mMeshComponents.erase(iter);
 }

@@ -20,6 +20,7 @@ class Asteroid;
 class Texture;
 class Shader;
 class Renderer;
+class CameraActor;
 
 class Game {
 public:
@@ -35,6 +36,7 @@ public:
     void removeSprite(SpriteComponent* component);
 
     Texture *loadTexture(const std::string& fileName);
+    Renderer* getRenderer() { return mRenderer; };
 
 
 private:
@@ -52,6 +54,7 @@ private:
     std::vector<Actor*> mActors;
     std::vector<Actor*> mPendingActors;
     Ship* mShip;
+    CameraActor* mCameraActor;
 
     bool mUpdatingActors;
 
