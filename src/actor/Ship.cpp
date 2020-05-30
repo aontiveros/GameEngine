@@ -1,14 +1,7 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
 
-#include "../../header/actor/Ship.h"
-#include "../../header/Game.h"
-#include "../../header/component/AnimSpriteComponent.h"
+#include "actor/Ship.h"
+#include "Game.h"
+#include "component/AnimSpriteComponent.h"
 
 Ship::Ship(Game* game)
 	:Actor(game)

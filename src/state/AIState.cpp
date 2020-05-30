@@ -3,7 +3,7 @@
 //
 
 #include <SDL_log.h>
-#include "../../header/state/AIState.h"
+#include "state/AIState.h"
 
 void AIState::onExit() {
 }

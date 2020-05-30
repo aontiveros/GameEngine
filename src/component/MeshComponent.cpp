@@ -2,14 +2,14 @@
 // Created by tony on 5/18/20.
 //
 
-#include "../../header/component/MeshComponent.h"
-#include "../../header/graphics/Shader.h"
-#include "../../header/actor/Actor.h"
-#include "../../header/graphics/Mesh.h"
-#include "../../header/graphics/VertexArray.h"
-#include "../../header/graphics/Texture.h"
-#include "../../header/Game.h"
-#include "../../header/graphics/Renderer.h"
+#include "component/MeshComponent.h"
+#include "graphics/Shader.h"
+#include "actor/Actor.h"
+#include "graphics/Mesh.h"
+#include "graphics/VertexArray.h"
+#include "graphics/Texture.h"
+#include "Game.h"
+#include "graphics/Renderer.h"
 
 MeshComponent::MeshComponent(Actor *actor) : Component(actor), mMesh(nullptr), mTextureIndex(0) {
     getActor()->getGame()->getRenderer()->addMeshComponent(this);

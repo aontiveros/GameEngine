@@ -2,7 +2,7 @@
 // Created by tony on 1/1/20.
 //
 
-#include "../header/Math.h"
+#include "Math.h"
 
 const Vector2 Vector2::Zero(0.0f, 0.0f);
 const Vector2 Vector2::UnitX(1.0f, 0.0f);

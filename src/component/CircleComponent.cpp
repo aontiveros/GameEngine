@@ -2,8 +2,8 @@
 // Created by tony on 1/27/20.
 //
 
-#include "../../header/component/CircleComponent.h"
-#include "../../header/actor/Actor.h"
+#include "component/CircleComponent.h"
+#include "actor/Actor.h"
 
 CircleComponent::CircleComponent(Actor *actor) : Component(actor) {
 }

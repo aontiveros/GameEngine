@@ -4,9 +4,8 @@
 #include <fstream>
 #include <SDL_log.h>
 
-#include "../../header/component/Component.h"
-
-#include "../../header/component/TileMapComponent.h"
+#include "component/Component.h"
+#include "component/TileMapComponent.h"
 
 
 TileMapComponent::TileMapComponent(int windowWidth, int windowHeight, Actor *actor, int drawOrder) : SpriteComponent(actor, drawOrder) {

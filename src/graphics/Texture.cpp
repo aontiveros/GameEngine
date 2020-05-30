@@ -2,7 +2,7 @@
 // Created by tony on 5/3/20.
 //
 
-#include "../../header/graphics/Texture.h"
+#include "graphics/Texture.h"
 #include <SOIL/SOIL.h>
 #include <GL/glew.h>
 #include <SDL_log.h>

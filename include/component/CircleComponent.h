@@ -6,7 +6,7 @@
 #define CHAPTER2_CIRCLECOMPONENT_H
 
 #include "Component.h"
-#include "../Math.h"
+#include "Math.h"
 
 class Actor;
 class Vector2;

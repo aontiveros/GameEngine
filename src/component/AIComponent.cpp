@@ -3,8 +3,8 @@
 //
 
 #include <SDL_log.h>
-#include "../../header/component/AIComponent.h"
-#include "../../header/state/AIState.h"
+#include "../../include/component/AIComponent.h"
+#include "../../include/state/AIState.h"
 
 AIComponent::AIComponent(Actor* actor) : Component(actor) {
 }

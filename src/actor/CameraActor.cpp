@@ -2,11 +2,11 @@
 // Created by tony on 5/25/20.
 //
 
-#include "../../header/actor/Actor.h"
-#include "../../header/actor/CameraActor.h"
-#include "../../header/Game.h"
-#include "../../header/component/MoveComponent.h"
-#include "../../header/graphics/Renderer.h"
+#include "actor/Actor.h"
+#include "actor/CameraActor.h"
+#include "Game.h"
+#include "component/MoveComponent.h"
+#include "graphics/Renderer.h"
 
 CameraActor::CameraActor(struct Game *game) : Actor(game) {
     mMoveComp = new MoveComponent(this);

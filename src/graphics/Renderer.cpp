@@ -2,14 +2,14 @@
 // Created by tony on 5/10/20.
 //
 
-#include "../../header/graphics/Renderer.h"
-#include "../../header/actor/Ship.h"
-#include "../../header/component/SpriteComponent.h"
-#include "../../header/component/MeshComponent.h"
-#include "../../header/graphics/VertexArray.h"
-#include "../../header/graphics/Texture.h"
-#include "../../header/graphics/Mesh.h"
-#include "../../header/graphics/Shader.h"
+#include "graphics/Renderer.h"
+#include "actor/Ship.h"
+#include "component/SpriteComponent.h"
+#include "component/MeshComponent.h"
+#include "graphics/VertexArray.h"
+#include "graphics/Texture.h"
+#include "graphics/Mesh.h"
+#include "graphics/Shader.h"
 
 #include <algorithm>
 #include <GL/glew.h>
@@ -80,38 +80,41 @@ bool Renderer::initialize(float screenWidth, float screenHeight) {
 }
 
 void Renderer::draw() {
-    // Set the color to grey
+    // Set the clear color to light grey
     glClearColor(mRed, mGreen, mBlue, 1.0f);
-    //clear the color buffer
-    glClear(GL_COLOR_BUFFER_BIT);
+    // Clear the color buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Draw all sprite components
-    // Enable alpha blending on the color buffer
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // Set the shader / vertices as active
-    mSpriteShader->setActive();
-    mSpriteVerts->setActive();
-
-    // Draw all out sprites
-    for(auto sprite : mSprites) {
-        sprite->draw(mSpriteShader);
-    }
-
-    //Swap the buffers, which also displays the scene
-    SDL_GL_SwapWindow(mWindow);
-
+    // Draw mesh components
     // Enable depth buffering/disable alpha blend
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
-    // Set the basic mesh shader active
+    // Set the mesh shader active
     mMeshShader->setActive();
-    // Update the view proj matrix
+    // Update view-projection matrix
     mMeshShader->setMatrixUniform("uViewProj", mView * mProjection);
-    for(auto mc : mMeshComponents) {
+    // Update lighting uniforms
+    setLightUniforms(mMeshShader);
+    for (auto mc : mMeshComponents) {
         mc->draw(mMeshShader);
     }
+
+    // Draw all sprite components
+    // Disable depth buffering
+    glDisable(GL_DEPTH_TEST);
+    // Enable alpha blending on the color buffer
+    glEnable(GL_BLEND);
+    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+    // Set shader/vao as active
+    mSpriteShader->setActive();
+    mSpriteVerts->setActive();
+    for (auto sprite : mSprites) {
+        sprite->draw(mSpriteShader);
+    }
+    // Swap the buffers
+    SDL_GL_SwapWindow(mWindow);
 }
 
 bool Renderer::loadShaders() {

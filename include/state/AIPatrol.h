@@ -5,7 +5,7 @@
 #ifndef CHAPTER2_AIPATROL_H
 #define CHAPTER2_AIPATROL_H
 
-#include "../../header/state/AIState.h"
+#include "state/AIState.h"
 
 //forward declarations
 class Component;

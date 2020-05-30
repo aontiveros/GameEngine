@@ -2,9 +2,9 @@
 // Created by tony on 1/14/20.
 //
 
-#include "../../header/component/MoveComponent.h"
-#include "../../header/actor/Actor.h"
-#include "../../header/Math.h"
+#include "component/MoveComponent.h"
+#include "actor/Actor.h"
+#include "Math.h"
 
 MoveComponent::MoveComponent(Actor *actor, int updateOwner) : Component(actor, updateOwner) {
 

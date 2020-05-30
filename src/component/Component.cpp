@@ -2,8 +2,8 @@
 // Created by tony on 1/1/20.
 //
 
-#include "../../header/component/Component.h"
-#include "../../header/actor/Actor.h"
+#include "component/Component.h"
+#include "actor/Actor.h"
 
 Component::Component(Actor *actor, int updateOrder) {
     mActor = actor;

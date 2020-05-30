@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <SDL_video.h>
 #include <vector>
-#include "../Math.h"
+#include "Math.h"
 
 //forward declares
 class MeshComponent;

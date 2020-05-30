@@ -3,12 +3,12 @@
 //
 
 #include <iostream>
-#include "../../header/component/SpriteComponent.h"
-#include "../../header/Game.h"
-#include "../../header/actor/Actor.h"
-#include "../../header/Math.h"
-#include "../../header/graphics/Shader.h"
-#include "../../header/graphics/Texture.h"
+#include "component/SpriteComponent.h"
+#include "Game.h"
+#include "actor/Actor.h"
+#include "Math.h"
+#include "graphics/Shader.h"
+#include "graphics/Texture.h"
 
 
 SpriteComponent::SpriteComponent(Actor *actor, int drawOrder) : Component(actor) {

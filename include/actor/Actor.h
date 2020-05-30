@@ -6,7 +6,7 @@
 #define CHAPTER2_ACTOR_H
 
 #include <vector>
-#include "../Math.h"
+#include "Math.h"
 
 //forward declarations
 class Game;

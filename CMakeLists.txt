@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(Chapter2)
+project(GameEngine)
 
 set(CMAKE_CXX_STANDARD 14)
 INCLUDE(FindPkgConfig)
@@ -47,34 +47,26 @@ foreach(file ${files})
     configure_file(Shaders/${file} ${CMAKE_BINARY_DIR}/Shaders/${file})
 endforeach()
 link_libraries(/usr/lib/libSOIL.so)
-add_executable(Chapter2 main.cpp
-        src/Game.cpp
-        header/Game.h
-        src/actor/Actor.cpp
-        header/actor/Actor.h
-        src/component/Component.cpp
-        header/component/Component.h
-        src/component/SpriteComponent.cpp
-        header/component/SpriteComponent.h
-        src/Math.cpp header/Math.h
-        src/component/AnimSpriteComponent.cpp
-        header/component/AnimSpriteComponent.h
-        src/component/BGSpriteComponent.cpp
-        header/component/BGSpriteComponent.h
-        src/actor/Ship.cpp header/actor/Ship.h
-        src/component/TileMapComponent.cpp
-        header/component/TileMapComponent.h
-        src/component/MoveComponent.cpp
-        header/component/MoveComponent.h
-        src/actor/Asteroid.cpp
-        header/actor/Asteroid.h
-        src/Random.cpp
-        header/Random.h
-        src/component/CircleComponent.cpp
-        header/component/CircleComponent.h
-        src/component/AIComponent.cpp
-        header/component/AIComponent.h
-        src/state/AIState.cpp
-        header/state/AIState.h
-        src/state/AIPatrol.cpp
-        header/state/AIPatrol.h src/graphics/VertexArray.cpp header/graphics/VertexArray.h src/graphics/Shader.cpp header/graphics/Shader.h src/graphics/Texture.cpp header/graphics/Texture.h src/graphics/Mesh.cpp header/graphics/Mesh.h src/graphics/Renderer.cpp header/graphics/Renderer.h src/component/MeshComponent.cpp header/component/MeshComponent.h src/actor/PlaneActor.cpp header/actor/PlaneActor.h src/actor/CameraActor.cpp header/actor/CameraActor.h)
+
+#Math library
+add_library(math src/Math.cpp include/Math.h src/Random.cpp include/Random.h)
+target_include_directories(math PRIVATE include)
+
+
+# Graphics library
+file(GLOB graphics_source src/graphics/*)
+file(GLOB graphics_include include/graphics/*)
+add_library(render ${graphics_source} ${graphics_include})
+target_include_directories(render PRIVATE include)
+
+# Component/Actor Library
+file(GLOB game_source src/Game.cpp src/component/* src/actor/* src/state/*)
+add_library(component ${game_source})
+target_link_libraries(component math render)
+target_include_directories(component PRIVATE include)
+
+# Game executable
+add_executable(GameEngine src/main.cpp)
+target_include_directories(GameEngine PRIVATE include)
+target_link_libraries(GameEngine render math component)
+

@@ -3,13 +3,14 @@
 //
 
 #include <GL/glew.h>
-#include "../../header/graphics/VertexArray.h"
+#include "graphics/VertexArray.h"
 
 VertexArray::VertexArray(const float *verts, unsigned int numVerts, const unsigned int *indices,
                          unsigned int numIndices) : mNumVerts(numVerts), mNumIndices(numIndices) {
     // Establish the vertex array from OpenGL
     glGenVertexArrays(1, &mVertexArray);
     glBindVertexArray(mVertexArray);
+
     //One vertex array object is bound, we can create our vertex buffer
     glGenBuffers(1, &mVertexBuffer);
     // GL_ARRAY_BUFFER signals that we want to use this as a vertex buffer
@@ -21,6 +22,7 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts, const unsign
             verts,  // Source to copy data from
             GL_STATIC_DRAW // How will this data be used.
             );
+
     // create the index buffer
     glGenBuffers(1, &mIndexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
@@ -31,6 +33,7 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts, const unsign
             indices,
             GL_STATIC_DRAW
             );
+
     //specify vertex layout
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(
@@ -38,12 +41,12 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts, const unsign
             3,  // Number of components (3 in our case)
             GL_FLOAT, // Type of components
             GL_FALSE, // (only used for integral types)
-            sizeof(float) * 5, // Stride (usually size of each vertex)
+            sizeof(float) * 8, // Stride (usually size of each vertex)
             0 // Offset from start of vertex to this attribute
             );
     //Vertex attribute for the texture
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5,
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8,
                           reinterpret_cast<void*>(sizeof(float) * 3));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8,

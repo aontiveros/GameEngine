@@ -2,10 +2,10 @@
 // Created by tony on 5/25/20.
 //
 
-#include "../../header/actor/PlaneActor.h"
-#include "../../header/Game.h"
-#include "../../header/graphics/Renderer.h"
-#include "../../header/component/MeshComponent.h"
+#include "actor/PlaneActor.h"
+#include "Game.h"
+#include "graphics/Renderer.h"
+#include "component/MeshComponent.h"
 
 PlaneActor::PlaneActor(Game* game)
         :Actor(game)

@@ -3,9 +3,9 @@
 //
 #include <algorithm>
 
-#include "../../header/actor/Actor.h"
-#include "../../header/component/Component.h"
-#include "../../header/Game.h"
+#include "actor/Actor.h"
+#include "component/Component.h"
+#include "Game.h"
 
 Actor::Actor(Game* game) {
     mState = Actor::EActive;

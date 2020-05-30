@@ -5,8 +5,8 @@
 #include <SDL_log.h>
 #include <fstream>
 #include <sstream>
-#include "../../header/graphics/Shader.h"
-#include "../../header/Math.h"
+#include "graphics/Shader.h"
+#include "Math.h"
 
 Shader::Shader() {}
 

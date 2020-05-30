@@ -2,7 +2,7 @@
 // Created by tony on 1/14/20.
 //
 
-#include "../header/Random.h"
+#include "Random.h"
 
 
 void Random::Init()

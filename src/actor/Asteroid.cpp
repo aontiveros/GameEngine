@@ -2,13 +2,13 @@
 // Created by tony on 1/14/20.
 //
 
-#include "../../header/actor/Asteroid.h"
-#include "../../header/Math.h"
-#include "../../header/Game.h"
-#include "../../header/Random.h"
-#include "../../header/component/SpriteComponent.h"
-#include "../../header/component/MoveComponent.h"
-#include "../../header/component/CircleComponent.h"
+#include "actor/Asteroid.h"
+#include "Math.h"
+#include "Game.h"
+#include "Random.h"
+#include "component/SpriteComponent.h"
+#include "component/MoveComponent.h"
+#include "component/CircleComponent.h"
 
 Asteroid::Asteroid(Game *game) : Actor(game) {
     Vector3 randPos = Random::getVector(Vector3(-512.0f, -384.0f, 0.0f),

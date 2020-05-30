@@ -5,20 +5,20 @@
 #include <algorithm>
 #include <GL/glew.h>
 #include <SDL_image.h>
-#include "../header/Game.h"
-#include "../header/actor/Actor.h"
-#include "../header/component/SpriteComponent.h"
-#include "../header/component/BGSpriteComponent.h"
-#include "../header/actor/Ship.h"
-#include "../header/component/TileMapComponent.h"
-#include "../header/actor/Asteroid.h"
-#include "../header/component/CircleComponent.h"
-#include "../header/graphics/Texture.h"
-#include "../header/graphics/Shader.h"
-#include "../header/graphics/Renderer.h"
-#include "../header/component/MeshComponent.h"
-#include "../header/actor/PlaneActor.h"
-#include "../header/actor/CameraActor.h"
+#include "Game.h"
+#include "actor/Actor.h"
+#include "component/SpriteComponent.h"
+#include "component/BGSpriteComponent.h"
+#include "actor/Ship.h"
+#include "component/TileMapComponent.h"
+#include "actor/Asteroid.h"
+#include "component/CircleComponent.h"
+#include "graphics/Texture.h"
+#include "graphics/Shader.h"
+#include "graphics/Renderer.h"
+#include "component/MeshComponent.h"
+#include "actor/PlaneActor.h"
+#include "actor/CameraActor.h"
 
 
 Game::Game() {

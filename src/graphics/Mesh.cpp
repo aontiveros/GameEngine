@@ -6,20 +6,22 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <iostream>
-#include "../../header/graphics/Mesh.h"
-#include "../../header/Game.h"
-#include "../../header/graphics/Texture.h"
-#include "../../header/graphics/VertexArray.h"
+#include "graphics/Mesh.h"
+#include "Game.h"
+#include "graphics/Texture.h"
+#include "graphics/VertexArray.h"
+#include "Math.h"
 
-Mesh::Mesh() {
+Mesh::Mesh() : mVertexArray(nullptr), mRadius(0.0f), mSpecularPower(100.0f) {
 
 }
 
 Mesh::~Mesh() {
-    delete mVertexArray;
+
 }
 // filename is the name of the mesh
 bool Mesh::load(const std::string &fileName, Game *game) {
+  mShaderName = fileName;
   std::ifstream ifs(fileName);
   rapidjson::IStreamWrapper isw(ifs);
   rapidjson::Document doc;
@@ -41,11 +43,16 @@ bool Mesh::load(const std::string &fileName, Game *game) {
 }
 
 Texture *Mesh::getTexture(size_t index) {
-    return mTextures.at(index);
+    if(index < mTextures.size() && index >= 0) {
+        return mTextures.at(index);
+    }
+    return nullptr;
 }
 
 void Mesh::unload() {
     // Textures are owned by the game for now.
+    delete mVertexArray;
+    mVertexArray = nullptr;
 }
 
 bool Mesh::parseTextureData(const rapidjson::Document &doc, const std::string& fileName, Game* game) {
@@ -70,12 +77,12 @@ bool Mesh::parseTextureData(const rapidjson::Document &doc, const std::string& f
 }
 
 bool Mesh::parseVertexData(const rapidjson::Document &doc, const std::string &fileName, Game *game) {
-    unsigned int* indicies;
-    unsigned int indexSize = 3;
-    unsigned int numOfIndicies = 0;
-    float* vertices;
-    unsigned int vertexSize = 8;
-    unsigned int numOfVertex = 0;
+    size_t indexSize = 3;
+    size_t vertSize = 8;
+
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+    float radius = 0.0f;
     {
         if (!doc.HasMember(VERTICIES_ATTRIBUTE.c_str())) {
             SDL_Log("Unable to find attribute: %s - please ensure %s is of correct format", VERTICIES_ATTRIBUTE.c_str(),
@@ -87,20 +94,21 @@ bool Mesh::parseVertexData(const rapidjson::Document &doc, const std::string &fi
             SDL_Log("The attribute %s in %s must be an array", VERTICIES_ATTRIBUTE.c_str(), fileName.c_str());
             return false;
         }
-        numOfVertex = vertexSize * itr->value.Size();
-        vertices = new float[numOfVertex];
-        int idx = 0;
+        unsigned int numOfVertex = vertSize * itr->value.Size();
+        vertices.reserve(numOfVertex);
         for (auto& vItr : itr->value.GetArray()) {
             if (!vItr.IsArray()) {
                 SDL_Log("Expected a array of floats, but got: %s", vItr.GetString());
                 return false;
             }
+            Vector3 pos(vItr[0].GetFloat(), vItr[1].GetFloat(), vItr[2].GetFloat());
+            radius = Math::Max(mRadius, pos.LengthSq());
             for (auto& fItr : vItr.GetArray()) {
                 if (!fItr.IsNumber()) {
                     SDL_Log("Expected a array of floats, but got: %u", fItr.GetType());
                     return false;
                 }
-                vertices[idx++] = fItr.GetFloat();
+                vertices.emplace_back(static_cast<float>(fItr.GetDouble()));
             }
         }
     }
@@ -116,9 +124,8 @@ bool Mesh::parseVertexData(const rapidjson::Document &doc, const std::string &fi
             SDL_Log("The attribute %s in %s must be an array", INDICIES_ATTRIBUTE.c_str(), fileName.c_str());
             return false;
         }
-        numOfIndicies = itr->value.Size() * indexSize;
-        indicies = new unsigned int[numOfIndicies];
-        int idx = 0;
+        size_t numOfIndices = itr->value.Size() * indexSize;
+        indices.reserve(numOfIndices);
         for (rapidjson::Value::ConstValueIterator vItr = itr->value.Begin(); vItr != itr->value.End(); vItr++) {
             if (!vItr->IsArray()) {
                 SDL_Log("Expected a array of floats, but got: %u", vItr->GetType());
@@ -126,13 +133,15 @@ bool Mesh::parseVertexData(const rapidjson::Document &doc, const std::string &fi
             }
             for (rapidjson::Value::ConstValueIterator fItr = vItr->Begin(); fItr != vItr->End(); fItr++) {
                 if (!fItr->IsUint()) {
-                    SDL_Log("Expected a array of uints, but got: %u", fItr->GetType());
+                    SDL_Log("Expected a array of uint, but got: %u", fItr->GetType());
                     return false;
                 }
-                indicies[idx++] = fItr->GetUint();
+                indices.emplace_back(fItr->GetUint());
             }
         }
     }
-    mVertexArray = new VertexArray(vertices, numOfVertex, indicies, numOfIndicies);
+    mRadius = Math::Sqrt(radius);
+    mVertexArray = new VertexArray(vertices.data(), static_cast<unsigned int>(vertices.size()) / vertSize, indices.data(),
+                                   static_cast<unsigned int>(indices.size()));
     return true;
 }

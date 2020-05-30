@@ -2,8 +2,8 @@
 // Created by tony on 1/1/20.
 //
 
-#include "../../header/component/AnimSpriteComponent.h"
-#include "../../header/graphics/Texture.h"
+#include "component/AnimSpriteComponent.h"
+#include "graphics/Texture.h"
 
 AnimSpriteComponent::AnimSpriteComponent(Actor *actor, int drawOrder) : SpriteComponent(actor, drawOrder) {
     mCurrentFrame = 0.0f;
