@@ -8,7 +8,7 @@
 #include "graphics/Shader.h"
 #include "Math.h"
 
-Shader::Shader() {}
+Shader::Shader() : mShaderProgram(0), mVertexShader(0), mFragShader(0) {}
 
 Shader::~Shader() {
 }

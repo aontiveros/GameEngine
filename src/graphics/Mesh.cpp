@@ -132,7 +132,7 @@ bool Mesh::parseVertexData(const rapidjson::Document &doc, const std::string &fi
                 return false;
             }
             for (rapidjson::Value::ConstValueIterator fItr = vItr->Begin(); fItr != vItr->End(); fItr++) {
-                if (!fItr->IsUint()) {
+                if (!fItr->IsUint(  )) {
                     SDL_Log("Expected a array of uint, but got: %u", fItr->GetType());
                     return false;
                 }

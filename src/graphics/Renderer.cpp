@@ -43,7 +43,12 @@ bool Renderer::initialize(float screenWidth, float screenHeight) {
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
     //Create window
-    mWindow = SDL_CreateWindow("OpenGL Game", 100, 100, mScreenWidth, mScreenHeight, SDL_WINDOW_OPENGL);
+    mWindow = SDL_CreateWindow("OpenGL Game",
+            100,
+            100,
+            static_cast<int>(mScreenWidth),
+            static_cast<int>(mScreenHeight),
+            SDL_WINDOW_OPENGL);
 
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -248,10 +253,11 @@ Mesh * Renderer::getMesh(const std::string &fileName) {
 
 void Renderer::createSpriteVerts() {
     float vertexBuffer[] = {
-            -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.0f, 0.0f, 0.0f,// top left
-            0.5f,  0.5f, 0.f, 1.f, 0.f,  0.0f, 0.0f, 0.0f, // top right
-            0.5f, -0.5f, 0.f, 1.f, 1.f,  0.0f, 0.0f, 0.0f, // bottom right
-            -0.5f, -0.5f, 0.f, 0.f, 1.f,  0.0f, 0.0f, 0.0f // bottom left
+            -0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 0.f, // top left
+            0.5f, 0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 0.f, // top right
+            0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 1.f, 1.f, // bottom right
+            -0.5f,-0.5f, 0.f, 0.f, 0.f, 0.0f, 0.f, 1.f  // bottom left
+
     };
 
     unsigned int indexBuffer[] = {

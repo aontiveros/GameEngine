@@ -6,6 +6,7 @@
 #define CHAPTER2_ACTOR_H
 
 #include <vector>
+#include <cstdint>
 #include "Math.h"
 
 //forward declarations
@@ -50,6 +51,9 @@ public:
     //World Transform
     void computeWorldTransform();
     const Matrix4& getWorldTransform() const { return mWorldTransform; }
+
+    void processInput(const uint8_t* keyState);
+    virtual void actorInput(const uint8_t* keyState);
 
 private:
     //Actors current state

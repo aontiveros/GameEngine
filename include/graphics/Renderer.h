@@ -95,7 +95,7 @@ private:
 
     float mRed = 0.0f;
     float mGreen = 0.0f;
-    float mBlue = 1.0f;
+    float mBlue = 0.0f;
     bool direction = true;
 
 };

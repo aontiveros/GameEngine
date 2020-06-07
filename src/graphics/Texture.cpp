@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <SDL_log.h>
 
-Texture::Texture() {
+Texture::Texture() : mTextureID(0), mHeight(0), mWidth(0) {
 
 }
 

@@ -21,4 +21,26 @@ void CameraActor::updateActor(float deltaTime) {
     Vector3 up = Vector3::UnitZ;
 
     Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
-    getGame()->getRenderer()->setViewMatrix(view);}
+    getGame()->getRenderer()->setViewMatrix(view);
+}
+
+void CameraActor::actorInput(const uint8_t *keyState) {
+    if (getState() == EActive) {
+        float fowardSpeed = 0.0f;
+        float angularSpeed = 0.0f;
+        if (keyState[SDL_SCANCODE_W]) {
+            fowardSpeed += 300.0f;
+        }
+        if (keyState[SDL_SCANCODE_S]) {
+            fowardSpeed -= 300.0f;
+        }
+        if (keyState[SDL_SCANCODE_A]) {
+            angularSpeed -= Math::Pi;
+        }
+        if (keyState[SDL_SCANCODE_D]) {
+            angularSpeed += Math::Pi;
+        }
+        mMoveComp->setForwardSpeed(fowardSpeed);
+        mMoveComp->setAngularSpeed(angularSpeed);
+    }
+}

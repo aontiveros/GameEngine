@@ -6,7 +6,8 @@
 #include "actor/Actor.h"
 #include "Math.h"
 
-MoveComponent::MoveComponent(Actor *actor, int updateOwner) : Component(actor, updateOwner) {
+MoveComponent::MoveComponent(Actor *actor, int updateOwner) : Component(actor, updateOwner),
+mAngularSpeed(0.0f), mForwardSpeed(0.0f) {
 
 }
 
@@ -16,7 +17,7 @@ void MoveComponent::update(float deltaTime) {
         float angle = mAngularSpeed * deltaTime;
         // Create a quaternion for incremental rotation
         // (Rotate about the axis)
-        Quaternion inc(Vector3::UnitX, angle);
+        Quaternion inc(Vector3::UnitZ, angle);
         // Concat old quaternion to old quaternion
         rot = Quaternion::Concatenate(rot, inc);
         getActor()->setRotation(rot);

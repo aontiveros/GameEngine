@@ -3,7 +3,7 @@
 
 // This should correspond to the data stored
 // for each vertex in the vertex buffer.
-//location refers to which index it is in the glVertexAttribPointer call
+// location refers to which index it is in the glVertexAttribPointer call
 layout(location=0) in vec3 inPosition;
 layout(location=1) in vec3 inNormal;
 layout(location=2) in vec2 inTexCoord;

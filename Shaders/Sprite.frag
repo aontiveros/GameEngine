@@ -11,6 +11,6 @@ out vec4 outColor;
 uniform sampler2D uTexture;
 
 void main() {
-    // Set the color to blue
+    // Sample color for the texture
     outColor = texture(uTexture, fragTextCoord);
 }

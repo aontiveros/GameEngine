@@ -76,6 +76,10 @@ void Game::processInput() {
     if(keyEvent[SDL_SCANCODE_ESCAPE]) {
         mIsRunning = false;
     }
+
+    for (auto actor : mActors) {
+        actor->actorInput(keyEvent);
+    }
 }
 
 void Game::updateGame() {

@@ -13,6 +13,7 @@ Actor::Actor(Game* game) {
     mScale = 1.0f;
     mRotation = Quaternion::Identity;
     mGame = game;
+    game->addActor(this);
     mRecomputeWorldTransform = true;
 }
 
@@ -24,8 +25,7 @@ Actor::~Actor() {
 }
 
 void Actor::update(float deltaTime) {
-    if (mState == EActive)
-    {
+    if (mState == EActive) {
         computeWorldTransform();
 
         updateComponents(deltaTime);
@@ -66,7 +66,7 @@ void Actor::computeWorldTransform() {
         //Scale -> Rotate -> Translate
         mWorldTransform = Matrix4::CreateScale(mScale);
         mWorldTransform *= Matrix4::CreateFromQuaternion(mRotation);
-        mWorldTransform *= Matrix4::CreateTranslation(Vector3(mPosition.x, mPosition.y, 0.0f));
+        mWorldTransform *= Matrix4::CreateTranslation(Vector3(mPosition.x, mPosition.y, mPosition.z));
 
         //Inform components that a world transform was done.
         for(auto component : mComponents) {
@@ -94,3 +94,18 @@ void Actor::setScale(float scale) {
     mScale = scale;
     mRecomputeWorldTransform = true;
 }
+
+void Actor::processInput(const uint8_t* keyState) {
+     if (mState == EActive) {
+         for (auto& comp : mComponents) {
+             comp->processInput(keyState);
+         }
+         actorInput(keyState);
+     }
+}
+
+void Actor::actorInput(const uint8_t* keyState) {
+
+}
+
+

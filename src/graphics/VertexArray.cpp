@@ -18,7 +18,7 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts, const unsign
     // Now that the buffer is bound, send the data
     glBufferData(
             GL_ARRAY_BUFFER, // The active buffer to write to
-            numVerts * 5 * sizeof(float), // Number of bytes we are copying
+            numVerts * 8 * sizeof(float), // Number of bytes we are copying
             verts,  // Source to copy data from
             GL_STATIC_DRAW // How will this data be used.
             );

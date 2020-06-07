@@ -5,6 +5,8 @@
 #ifndef CHAPTER2_COMPONENT_H
 #define CHAPTER2_COMPONENT_H
 
+#include <cstdint>
+
 //forward declarations
 class Actor;
 
@@ -20,6 +22,8 @@ public:
     //Callback when world transform is updated
     virtual void onUpdateWorldTransform() {}
 
+    virtual void processInput(const uint8_t *keyState);
+
     //getter
     Actor* getActor() { return mActor; }
     int getUpdateOrder() { return mUpdateOrder; }
@@ -29,6 +33,7 @@ private:
     Actor* mActor;
     //the set update order
     int mUpdateOrder;
+
 };
 
 

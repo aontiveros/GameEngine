@@ -18,3 +18,7 @@ Component::~Component() {
 void Component::update(float deltaTime) {
 
 }
+
+void Component::processInput(const uint8_t *keyState) {
+
+}
